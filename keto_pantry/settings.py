@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-# import env
+
 import dj_database_url    
 
 
@@ -27,15 +27,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-if os.path.exists(".env"):
-    from dotenv import load_dotenv
-    load_dotenv()
-    DEBUG = True
-else:
-    DEBUG = True
-    STATICFILES_STORAGE = "custom_storages.StaticStorage"
 
-ALLOWED_HOSTS = ['keto-pantry.herokuapp.com', '127.0.0.1']
+
+ALLOWED_HOSTS = ['happytreesssss.herokuapp.com', '127.0.0.1', "localhost"]
 
 
 # Application definition
@@ -90,18 +84,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'keto_pantry.wsgi.application'
 
 
-if "DATABASE_URL" in os.environ:
-    DATABASES = {
-        "default": dj_database_url.parse(os.getenv("DATABASE_URL"))
-    }
-else:
-    print("Postgres URL not found, using sqlite3 instead")
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
-    }
+DATABASES = {
+    "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -141,14 +127,17 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=94608000'
 }
 
-AWS_STORAGE_BUCKET_NAME = "ketopantry"
+AWS_STORAGE_BUCKET_NAME = "awesomebucketofjoy"
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+
 AWS_S3_HOST = 's3-ap-southeast-2.amazonaws.com'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
 STATICFILES_LOCATION = 'static'
 STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+
 MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
